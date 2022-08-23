@@ -3,8 +3,8 @@ from parsel import Selector
 import requests
 import time
 
-# html = fetch("https://blog.betrybe.com")
-# scrape_novidades(html)
+
+# html = fetch("https://blog.betrybe.com/")
 
 
 # Requisito 1
@@ -32,7 +32,9 @@ def scrape_novidades(html_content):
 
 # Requisito 3
 def scrape_next_page_link(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+    next_page_url = selector.css("a.next.page-numbers::attr(href)").get()
+    return next_page_url
 
 
 # Requisito 4
