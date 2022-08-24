@@ -1,5 +1,6 @@
 from requests.exceptions import HTTPError
 from parsel import Selector
+from tech_news.database import create_news
 import requests
 import time
 
@@ -73,4 +74,23 @@ def scrape_noticia(html_content):
 
 # Requisito 5
 def get_tech_news(amount):
-    """Seu código deve vir aqui"""
+    URL_BASE = "https://blog.betrybe.com/"
+    html = fetch(URL_BASE)
+    url_news = scrape_novidades(html)
+    next_page_link = scrape_next_page_link(html)
+    # url_news_length = len(url_news)
+    news = []
+
+    while len(url_news) < amount:
+        next_page_html = fetch(next_page_link)
+        next_page_url_news = scrape_novidades(next_page_html)
+        url_news += next_page_url_news
+        next_page_link = scrape_next_page_link(next_page_html)
+
+    for index in range(0, amount):
+        news_html = fetch(url_news[index])
+        news_scraped = scrape_noticia(news_html)
+        news.append(news_scraped)
+
+    create_news(news)
+    return news
