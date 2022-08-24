@@ -23,4 +23,29 @@ def top_5_news():
 
 # Requisito 11
 def top_5_categories():
-    """Seu código deve vir aqui"""
+    search_result = find_news()
+    category_list = list(set(news["category"] for news in search_result))
+    value = 0
+
+    category_dict = dict.fromkeys(category_list, value)
+
+    for news in search_result:
+        category_dict[news["category"]] += 1
+
+    category_dict_sorted_by_name = dict(
+        sorted(category_dict.items(), key=lambda x: x[0])
+    )
+
+    category_dict_sorted_by_quantity = dict(
+        sorted(
+            category_dict_sorted_by_name.items(),
+            reverse=True,
+            key=lambda x: x[1],
+        )
+    )
+
+    return list(category_dict_sorted_by_quantity)
+
+
+# organizar dicionario por valor
+# https://stackoverflow.com/questions/613183/how-do-i-sort-a-dictionary-by-value
